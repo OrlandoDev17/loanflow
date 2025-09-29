@@ -75,16 +75,6 @@ function App() {
   // Crear préstamo
   const crearPrestamo = async () => {
     try {
-      const res = await axios.post<Prestamo>(
-        "http://localhost:3000/prestamos",
-        {
-          ...prestamoForm,
-          clienteId: parseInt(prestamoForm.clienteId),
-          monto: parseFloat(prestamoForm.monto),
-          cuotas: parseInt(prestamoForm.cuotas),
-          interes: parseFloat(prestamoForm.interes),
-        }
-      );
       alert("Préstamo creado");
       setPrestamoForm({
         clienteId: "",
