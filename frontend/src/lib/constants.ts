@@ -1,5 +1,5 @@
 //Tipos
-import type { SidebarItem } from "@/lib/types";
+import type { Client, FormClient, SidebarItem } from "@/lib/types";
 
 //Iconos
 import {
@@ -33,5 +33,44 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     label: "Clientes",
     href: "/clients",
     icon: UsersIcon,
+  },
+];
+
+export const FORM_CLIENTS: FormClient[] = [
+  {
+    id: "nombre",
+    label: "Nombre",
+    placeholder: "Orlando",
+    type: "text",
+  },
+  {
+    id: "apellido",
+    label: "Apellido",
+    placeholder: "López",
+    type: "text",
+  },
+  {
+    id: "cedula",
+    label: "Cédula",
+    placeholder: "123456789",
+    type: "number",
+  },
+  {
+    id: "telefono",
+    label: "Teléfono",
+    placeholder: "04241234567",
+    type: "number",
+  },
+  {
+    id: "correo",
+    label: "Correo",
+    placeholder: "orlando@gmail.com",
+    type: "email",
+  },
+  {
+    id: "direccion",
+    label: "Dirección",
+    placeholder: "Calle 123",
+    type: "text",
   },
 ];

@@ -10,3 +10,20 @@ export interface SidebarItem {
   href: string;
   icon: ComponentType<Icon>;
 }
+
+export interface Client {
+  id?: string;
+  nombre: string;
+  apellido: string;
+  cedula: number;
+  correo: string;
+  telefono: string;
+  direccion: string;
+}
+
+export interface FormClient {
+  id: string;
+  label: string;
+  placeholder: string;
+  type: string;
+}

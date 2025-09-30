@@ -1,13 +1,18 @@
-export function Container({ children }: { children: React.ReactNode }) {
+export function Container({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen h-full bg-white">
       {/* Onda en la parte superior */}
-      <div className="w-full h-[600px] absolute top-0 left-0">
+      <div className="w-full h-[600px] absolute bottom-0 left-0">
         <svg
           viewBox="0 0 1440 320"
           className="w-full h-full"
           preserveAspectRatio="none"
-          style={{ transform: "scaleY(-1)" }}
         >
           <path
             fillOpacity="0.2"
@@ -18,9 +23,11 @@ export function Container({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Contenido */}
-      <div className="relative z-10 px-8 py-8 flex flex-col gap-8">
+      <section
+        className={`relative z-10 px-8 py-8 flex flex-col gap-8 h-full ${className}`}
+      >
         {children}
-      </div>
+      </section>
     </div>
   );
 }
