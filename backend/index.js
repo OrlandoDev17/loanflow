@@ -104,6 +104,7 @@ app.get("/prestamos", async (req, res) => {
     });
     res.json(prestamos);
   } catch (error) {
+    console.error("Error al obtener préstamos:", error);
     res.status(500).json({ error: "Error al obtener préstamos" });
   }
 });
