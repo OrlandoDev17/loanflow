@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("token", token);
     localStorage.setItem("usuario", JSON.stringify(usuario));
     setUsuario(usuario);
-    router.push("/dashboard");
+    router.push("/");
   };
 
   const logout = () => {
