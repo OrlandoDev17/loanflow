@@ -17,6 +17,7 @@ export function useRegister() {
         correo,
         password,
       });
+      localStorage.setItem("token", res.data.token);
       return res.data.usuario;
     } catch (err: unknown) {
       const axiosError = err as AxiosError<APIError>;

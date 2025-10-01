@@ -14,7 +14,11 @@ export function useClients() {
       setIsLoading(true);
       setError(null);
       try {
-        const res = await axios.get(`${API_URL}/clientes`);
+        const res = await axios.get(`${API_URL}/clientes`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // 🔑 enviar token
+          },
+        });
         setClients(res.data);
       } catch (err: unknown) {
         const axiosError = err as AxiosError<APIError>;
@@ -35,7 +39,12 @@ export function useClients() {
     setError(null);
 
     try {
-      const res = await axios.post(`${API_URL}/clientes`, data);
+      const res = await axios.post(`${API_URL}/clientes`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setClients((prev) => [...prev, res.data]); // 🔑 actualizar lista
       return res.data;
     } catch (err: unknown) {
       const axiosError = err as AxiosError<APIError>;

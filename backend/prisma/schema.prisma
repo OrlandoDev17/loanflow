@@ -8,24 +8,25 @@ datasource db {
 }
 
 model Usuario {
-  id        Int     @id @default(autoincrement())
+  id        String    @id @default(cuid())
   nombre    String
   correo    String  @unique
   password String
-  creadoEn  DateTime @default(now())
+  clientes Cliente[]
 }
 
 
 model Cliente {
-  id        Int     @id @default(autoincrement())
+  id        String     @id @default(cuid())
   nombre    String
   apellido  String
   cedula    Int @unique
   telefono  String
   correo    String
   direccion String
-  creadoEn  DateTime @default(now())
   prestamos Prestamo[]
+  usuarioId String
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id])
 }
 
 model Prestamo {
@@ -36,7 +37,7 @@ model Prestamo {
   fechaInicio    DateTime
   frecuenciaPago String
   nota           String?   // Campo opcional
-  clienteId      Int
+  clienteId      String
   cliente        Cliente  @relation(fields: [clienteId], references: [id])
   pagos          Pago[]
 }

@@ -2,26 +2,40 @@ const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
+const verifyToken = require("../middlewares/verifyToken");
 
-router.get("/", async (req, res) => {
+// Obtener clientes del usuario autenticado
+router.get("/", verifyToken, async (req, res) => {
   try {
     const clientes = await prisma.cliente.findMany({
+      where: { usuarioId: req.usuario.id }, // 🔑 filtra por usuario
       include: { prestamos: true },
     });
     res.json(clientes);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Error al obtener clientes" });
   }
 });
 
-router.post("/", async (req, res) => {
+// Crear cliente asociado al usuario autenticado
+router.post("/", verifyToken, async (req, res) => {
   const { nombre, apellido, telefono, correo, direccion, cedula } = req.body;
   try {
     const cliente = await prisma.cliente.create({
-      data: { nombre, apellido, telefono, correo, direccion, cedula },
+      data: {
+        nombre,
+        apellido,
+        telefono,
+        correo,
+        direccion,
+        cedula,
+        usuarioId: req.usuario.id, // 🔑 se vincula al usuario logueado
+      },
     });
     res.json(cliente);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Error al crear cliente" });
   }
 });

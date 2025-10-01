@@ -7,29 +7,22 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   const { nombre, correo, password } = req.body;
-
-  if (!nombre || !correo || !password) {
-    return res.status(400).json({ error: "Faltan campos obligatorios" });
-  }
-
   try {
-    const hash = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const usuario = await prisma.usuario.create({
-      data: { nombre, correo, password: hash },
+      data: { nombre, correo, password: hashedPassword },
     });
-    res.status(201).json({ mensaje: "Usuario creado", usuario });
+
+    // 🔑 Generar token al registrarse
+    const token = jwt.sign(
+      { id: usuario.id, correo: usuario.correo },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({ usuario, token });
   } catch (error) {
-    console.error("Error al registrar:", error); // 👈 esto te mostrará el error real en consola
-
-    // Prisma error por correo duplicado
-    if (error.code === "P2002" && error.meta?.target?.includes("correo")) {
-      return res.status(400).json({ error: "El correo ya está registrado" });
-    }
-
-    // Error por campos faltantes u otros
-    return res
-      .status(500)
-      .json({ error: "Error interno al registrar usuario" });
+    res.status(500).json({ error: "Error al registrar usuario" });
   }
 });
 
