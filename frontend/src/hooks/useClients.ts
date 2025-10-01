@@ -7,14 +7,14 @@ export function useClients() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     const fetchClients = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const res = await axios.get(
-          "https://app-prestamos.up.railway.app/clientes"
-        );
+        const res = await axios.get(`${API_URL}/clientes`);
         setClients(res.data);
       } catch (err: unknown) {
         const axiosError = err as AxiosError<APIError>;
@@ -35,10 +35,7 @@ export function useClients() {
     setError(null);
 
     try {
-      const res = await axios.post(
-        "https://app-prestamos.up.railway.app/clientes",
-        data
-      );
+      const res = await axios.post(`${API_URL}/clientes`, data);
       return res.data;
     } catch (err: unknown) {
       const axiosError = err as AxiosError<APIError>;

@@ -9,7 +9,12 @@ const authMiddleware = require("./middlewares/authMiddleware");
 const clientesRoutes = require("./routes/clientes");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://loanflow.vercel.app/"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use("/prestamos", authMiddleware, prestamosRoutes);
