@@ -18,6 +18,6 @@ app.use("/dashboard", authMiddleware, dashboardRoutes);
 app.use("/auth", authRoutes);
 app.use("/clientes", authMiddleware, clientesRoutes);
 
-app.listen(3001, () => {
-  console.log("Servidor corriendo en http://localhost:3001");
+app.listen(process.env.PORT || 3001, () => {
+  console.log("Servidor corriendo ...");
 });
