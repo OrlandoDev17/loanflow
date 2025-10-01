@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { APIError } from "@/lib/types";
 
 export function useRegister() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,8 +16,13 @@ export function useRegister() {
         password,
       });
       return res.data.usuario;
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Error al registrar usuario");
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<APIError>;
+      setError(
+        axiosError.response?.data?.message ||
+          axiosError.response?.data?.error ||
+          "Error al registrar usuario"
+      );
       return null;
     } finally {
       setIsLoading(false);

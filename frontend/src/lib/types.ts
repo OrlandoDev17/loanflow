@@ -27,3 +27,8 @@ export interface FormClient {
   placeholder: string;
   type: string;
 }
+
+export interface APIError {
+  error?: string;
+  message?: string;
+}

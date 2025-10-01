@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { APIError } from "@/lib/types";
 
 export function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,8 +16,13 @@ export function useLogin() {
       });
       localStorage.setItem("token", res.data.token);
       return res.data.usuario;
-    } catch (err: any) {
-      setError(err.response.data.error || "Error al iniciar sesión");
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<APIError>;
+      setError(
+        axiosError.response?.data?.message ||
+          axiosError.response?.data?.error ||
+          "Error al iniciar sesión"
+      );
       return null;
     } finally {
       setIsLoading(false);

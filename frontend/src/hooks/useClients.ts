@@ -1,6 +1,6 @@
+import axios, { AxiosError } from "axios";
+import { APIError, Client } from "@/lib/types";
 import { useState, useEffect } from "react";
-import { Client } from "@/lib/types";
-import axios from "axios";
 
 export function useClients() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -12,10 +12,19 @@ export function useClients() {
       setIsLoading(true);
       setError(null);
       try {
-        const res = await axios.get("http://localhost:3001/clientes");
+        const res = await axios.get(
+          "https://app-prestamos.up.railway.app/clientes"
+        );
         setClients(res.data);
-      } catch (err) {
-        console.error("Error al obtener clientes", err);
+      } catch (err: unknown) {
+        const axiosError = err as AxiosError<APIError>;
+        setError(
+          axiosError.response?.data?.message ||
+            axiosError.response?.data?.error ||
+            "Error al obtener clientes"
+        );
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchClients();
@@ -26,10 +35,18 @@ export function useClients() {
     setError(null);
 
     try {
-      const res = await axios.post("http://localhost:3001/clientes", data);
+      const res = await axios.post(
+        "https://app-prestamos.up.railway.app/clientes",
+        data
+      );
       return res.data;
-    } catch (err: any) {
-      setError(err.response.data.message || "Error al crear el cliente");
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<APIError>;
+      setError(
+        axiosError.response?.data?.message ||
+          axiosError.response?.data?.error ||
+          "Error al crear el cliente"
+      );
     } finally {
       setIsLoading(false);
     }
