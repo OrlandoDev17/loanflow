@@ -29,8 +29,8 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={`${inter.variable} antialiased`}>
-        {!hideSidebar && <Sidebar />}
         <AuthProvider>
+          {!hideSidebar && <Sidebar />}
           <main className={hideSidebar ? "" : "ml-64"}>{children}</main>
         </AuthProvider>
       </body>
