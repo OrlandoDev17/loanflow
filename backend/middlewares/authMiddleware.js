@@ -7,8 +7,9 @@ function authMiddleware(req, res, next) {
 
   const token = authHeader.split(" ")[1];
   try {
-    const decoded = jwt.verify(token, "admin"); // 👈 clave debe coincidir con la del login
-    req.usuarioId = decoded.id;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // 🔑 aquí puedes guardar todo el objeto decodificado
+    req.usuario = decoded; // { id, correo }
     next();
   } catch (err) {
     res.status(401).json({ error: "Token inválido o expirado" });
