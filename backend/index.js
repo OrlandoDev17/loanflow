@@ -8,7 +8,6 @@ const dashboardRoutes = require("./routes/dashboard");
 const authMiddleware = require("./middlewares/authMiddleware");
 const clientesRoutes = require("./routes/clientes");
 
-const app = express();
 app.use(
   cors({
     origin: [
@@ -20,6 +19,7 @@ app.use(
     credentials: true,
   })
 );
+const app = express();
 app.use(express.json());
 
 app.use("/prestamos", authMiddleware, prestamosRoutes);
