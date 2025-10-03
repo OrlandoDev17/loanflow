@@ -12,7 +12,16 @@ export interface SidebarItem {
 }
 
 export interface Client {
-  id?: string;
+  id: string;
+  nombre: string;
+  apellido: string;
+  cedula: number;
+  correo: string;
+  telefono: string;
+  direccion: string;
+}
+
+export interface ClientInput {
   nombre: string;
   apellido: string;
   cedula: number;
@@ -22,7 +31,8 @@ export interface Client {
 }
 
 export interface FormClient {
-  id: string;
+  id: number;
+  name: keyof ClientInput;
   label: string;
   placeholder: string;
   type: string;
