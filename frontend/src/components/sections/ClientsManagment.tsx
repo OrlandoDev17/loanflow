@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useClients } from "@/hooks/useClients";
-
+import { triggerConfetti } from "@/lib/confetti";
+import { ClientInput } from "@/lib/types";
 import { Container } from "@/components/ui/Container";
-import { PlusIcon } from "@/components/ui/Icons";
-import { NoClients } from "@/components/ui/NoClients";
 import { ClientModal } from "@/components/ui/ClientModal";
-
+import { ClientList } from "@/components/ui/ClientList";
+import { NoClients } from "@/components/ui/NoClients";
 import { AnimatePresence, motion } from "motion/react";
-import { Client } from "@/lib/types";
-import { ClientList } from "../ui/ClientList";
+
+import { PlusIcon } from "@/components/ui/Icons";
 
 export function ClientsManagment() {
   const { createClient, isLoading, error, clients } = useClients();
@@ -27,11 +27,12 @@ export function ClientsManagment() {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = async (data: Client) => {
+  const handleSubmit = async (data: ClientInput) => {
     try {
       await createClient(data);
       closeModal();
-      // Podés agregar un toast de éxito aquí
+      // Trigger confetti effect
+      setTimeout(triggerConfetti, 300);
     } catch (err) {
       console.error("Error al crear cliente", err);
       // Podés mostrar un toast de error también
@@ -57,9 +58,23 @@ export function ClientsManagment() {
       </header>
       <AnimatePresence>
         {clients.length > 0 ? (
-          <ClientList clients={clients} />
+          <motion.div key="clients-list">
+            <ClientList clients={clients} />
+          </motion.div>
         ) : (
-          <NoClients onCreateClient={() => setIsModalOpen(true)} />
+          <motion.div key="no-clients">
+            <NoClients onCreateClient={() => setIsModalOpen(true)} />
+          </motion.div>
+        )}
+        {error && (
+          <motion.div key="error">
+            <p className="text-red-500">{error}</p>
+          </motion.div>
+        )}
+        {isLoading && (
+          <motion.div key="loading">
+            <p className="text-gray-500">Creando cliente...</p>
+          </motion.div>
         )}
       </AnimatePresence>
       <AnimatePresence>
