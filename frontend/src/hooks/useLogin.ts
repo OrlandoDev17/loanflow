@@ -1,12 +1,14 @@
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { APIError } from "@/lib/types";
+import { triggerConfetti } from "@/lib/confetti";
 
 export function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_LOCAL_URL;
 
   const login = async (correo: string, password: string) => {
     setIsLoading(true);
@@ -17,6 +19,9 @@ export function useLogin() {
         password,
       });
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("usuario", JSON.stringify(res.data.usuario));
+      // Trigger confetti effect
+      setTimeout(triggerConfetti, 500);
       return res.data.usuario;
     } catch (err: unknown) {
       const axiosError = err as AxiosError<APIError>;

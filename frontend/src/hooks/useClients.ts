@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { APIError, Client } from "@/lib/types";
+import { APIError, Client, ClientInput } from "@/lib/types";
 import { useState, useEffect } from "react";
 
 export function useClients() {
@@ -7,7 +7,8 @@ export function useClients() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_LOCAL_URL;
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -34,7 +35,7 @@ export function useClients() {
     fetchClients();
   }, []);
 
-  const createClient = async (data: Client) => {
+  const createClient = async (data: ClientInput) => {
     setIsLoading(true);
     setError(null);
 
@@ -46,8 +47,9 @@ export function useClients() {
       });
       setClients((prev) => [...prev, res.data]); // 🔑 actualizar lista
       return res.data;
-    } catch (err: unknown) {
-      const axiosError = err as AxiosError<APIError>;
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<APIError>;
+      console.error("🔥 Axios error:", axiosError.response?.data);
       setError(
         axiosError.response?.data?.message ||
           axiosError.response?.data?.error ||
