@@ -7,14 +7,9 @@ import { motion, AnimatePresence } from "motion/react";
 export function Welcome() {
   const { usuario } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
-  const [greeting, setGreeting] = useState("Bienvenido");
+  const greeting = "Bienvenido";
 
   useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting("¡Buenos días");
-    else if (hour < 19) setGreeting("¡Buenas tardes");
-    else setGreeting("¡Buenas noches");
-
     const timer = setTimeout(() => {
       setIsVisible(false);
     }, 5000);

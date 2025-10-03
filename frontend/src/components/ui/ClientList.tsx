@@ -11,7 +11,7 @@ export function ClientList({ clients }: { clients: Client[] }) {
       {clients.map((client) => (
         <article
           className="flex flex-col gap-4 bg-white p-6 rounded-xl border border-gray-200 w-full max-w-lg hover:-translate-y-2 transition-transform"
-          key={client.id}
+          key={client.id || client.cedula}
         >
           <header className="flex items-center gap-4">
             <span className="p-3 rounded-full bg-primary text-white text-xl font-medium">

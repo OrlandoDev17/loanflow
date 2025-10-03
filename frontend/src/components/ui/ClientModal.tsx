@@ -1,17 +1,27 @@
 import { FORM_CLIENTS } from "@/lib/constants";
 import { XIcon } from "./Icons";
-import { Client } from "@/lib/types";
+import { ClientInput } from "@/lib/types";
 
 interface ClientModalProps {
   onClose: () => void;
-  onSubmit: (data: Client) => void;
+  onSubmit: (data: ClientInput) => void;
 }
 
 export function ClientModal({ onClose, onSubmit }: ClientModalProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData) as unknown as Client;
+    const rawData = Object.fromEntries(formData);
+
+    const data: ClientInput = {
+      nombre: rawData.nombre as string,
+      apellido: rawData.apellido as string,
+      cedula: Number(rawData.cedula),
+      telefono: rawData.telefono as string,
+      correo: rawData.correo as string,
+      direccion: rawData.direccion as string,
+    };
+
     onSubmit(data);
   };
 
@@ -24,14 +34,14 @@ export function ClientModal({ onClose, onSubmit }: ClientModalProps) {
         </button>
       </header>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        {FORM_CLIENTS.map(({ id, label, placeholder, type }) => (
-          <label className="flex flex-col gap-2" key={id}>
+        {FORM_CLIENTS.map(({ id, name, label, placeholder, type }) => (
+          <label className="flex flex-col gap-2" key={name}>
             <span className="font-medium">{label}</span>
             <input
               className="text-sm px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary transition-all cursor-pointer"
               type={type}
               placeholder={placeholder}
-              name={id}
+              name={name}
             />
           </label>
         ))}
