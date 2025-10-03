@@ -5,9 +5,10 @@ const prestamosRoutes = require("./routes/prestamos");
 const pagosRoutes = require("./routes/pagos");
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
-const authMiddleware = require("./middlewares/authMiddleware");
 const clientesRoutes = require("./routes/clientes");
+const verifyToken = require("./middlewares/verifyToken");
 
+const app = express();
 app.use(
   cors({
     origin: [
@@ -19,15 +20,14 @@ app.use(
     credentials: true,
   })
 );
-const app = express();
 app.use(express.json());
 
-app.use("/prestamos", authMiddleware, prestamosRoutes);
-app.use("/pagos", authMiddleware, pagosRoutes);
-app.use("/dashboard", authMiddleware, dashboardRoutes);
+app.use("/prestamos", verifyToken, prestamosRoutes);
+app.use("/pagos", verifyToken, pagosRoutes);
+app.use("/dashboard", verifyToken, dashboardRoutes);
 app.use("/auth", authRoutes);
-app.use("/clientes", authMiddleware, clientesRoutes);
+app.use("/clientes", verifyToken, clientesRoutes);
 
 app.listen(process.env.PORT || 3001, () => {
-  console.log("Servidor corriendo ...");
+  console.log(`Servidor corriendo en ${process.env.PORT || 3001} ...`);
 });

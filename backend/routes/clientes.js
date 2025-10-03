@@ -2,7 +2,7 @@ const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
-const verifyToken = require("../middlewares/verifyToken");
+const authMiddleware = require("../middlewares/verifyToken");
 
 // Obtener clientes del usuario autenticado
 router.get("/", authMiddleware, async (req, res) => {

@@ -1,4 +1,3 @@
-// middlewares/verifyToken.js
 const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
@@ -7,11 +6,14 @@ function verifyToken(req, res, next) {
 
   if (!token) return res.status(401).json({ error: "Token requerido" });
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, usuario) => {
-    if (err) return res.status(403).json({ error: "Token inválido" });
-    req.usuario = usuario;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.usuario = decoded; // { id, correo }
     next();
-  });
+  } catch (err) {
+    console.error("Error al verificar token:", err);
+    res.status(403).json({ error: "Token inválido o expirado" });
+  }
 }
 
 module.exports = verifyToken;
